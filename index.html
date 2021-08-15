@@ -31,7 +31,14 @@
   <!-- script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script -->
   <script>
     var gun = Gun({ peers: ["https://ulvigundb.loca.lt/gun"] });
-    var user = gun.user().recall({sessionStorage: true});
+    var user = gun.user().recall({ sessionStorage: true });
+
+    const userAutharized = () => {
+      $('#sign').hide();
+      user.get('said').map().once(UI);
+    }
+
+    if (user.is) userAutharized();
 
     $('#up').on('click', function (e) {
       user.create($('#alias').val(), $('#pass').val());
@@ -54,10 +61,7 @@
       $(li).text(say);
     };
 
-    gun.on('auth', function () {
-      $('#sign').hide();
-      user.get('said').map().once(UI);
-    });
+    gun.on('auth', userAutharized);
   </script>
 </body>
 
