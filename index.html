@@ -9,52 +9,55 @@
 </head>
 
 <body>
-  <h1 id="title"></h1>
+  <h1>Todo</h1>
+
   <form id="sign">
     <input id="alias" placeholder="username">
     <input id="pass" type="password" placeholder="passphrase">
-    <input id="in" type="submit" value="login">
+    <input id="in" type="submit" value="sign in">
     <input id="up" type="button" value="sign up">
   </form>
 
-  <ul id="todos"></ul>
-  <script src="./gun.js"></script>
-  <script src="./sea.js"></script>
+  <ul></ul>
+
+  <form id="said">
+      <input id="say">
+      <input id="speak" type="submit" value="speak">
+  </form>
+
+  <script src="jquery.js"></script>
+  <script src="gun.js"></script>
+  <script src="sea.js"></script>
+  <!-- script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script -->
   <script>
-    let title = document.getElementById("title")
-    let signForm = document.getElementById("sign")
-    let alias = document.getElementById("alias")
-    let pass = document.getElementById("pass")
-    let login = document.getElementById("in")
-    let signUp = document.getElementById("up")
-    const gun = Gun(["https://eczado.loca.lt"]);
-    const user = gun.user();
+  var gun = Gun(["https://eczado.loca.lt"]);
+  var user = gun.user();
 
-    // sign up
-    signUp.addEventListener("click", (e) => {
-      user.auth(alias.value, pass.value);
-    });
+  $('#up').on('click', function(e){
+    user.create($('#alias').val(), $('#pass').val());
+  });
 
-    // login
-    login.addEventListener("click", (e) => {
-      e.preventDefault();
-      user.auth(alias.value, pass.value);
-    });
+  $('#sign').on('submit', function(e){
+    e.preventDefault();
+    user.auth($('#alias').val(), $('#pass').val());
+  });
 
-    function UI(say, id) {
-      let ul = document.getElementById("todos");
-      let li = document.createElement("li");
-      li.id = id;
-      li.innerHTML = say;
-      ul.appendChild(li);
-    };
+  $('#said').on('submit', function(e){
+    e.preventDefault();
+    if(!user.is){ return }
+    user.get('said').set($('#say').val());
+    $('#say').val("");
+  });
 
-    gun.on('auth', () => {
-      signForm.style.display = "none";
-      user.get('said').map().once(UI);
-    });
+  function UI(say, id){
+    var li = $('#' + id).get(0) || $('<li>').attr('id', id).appendTo('ul');
+    $(li).text(say);
+  };
 
-    gun.get("test").get("paste").on((data, key) => title.innerHTML = data);
+  gun.on('auth', function(){
+    $('#sign').hide();
+    user.get('said').map().once(UI);
+  });
   </script>
 </body>
 
