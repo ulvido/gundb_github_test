@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Example</title>
+</head>
+
+<body>
+  <h1 id="title"></h1>
+  <form id="sign">
+    <input id="alias" placeholder="username">
+    <input id="pass" type="password" placeholder="passphrase">
+    <input id="in" type="submit" value="login">
+    <input id="up" type="button" value="sign up">
+  </form>
+
+  <ul id="todos"></ul>
+  <script src="./gun.js"></script>
+  <script src="./sea.js"></script>
+  <script>
+    let title = document.getElementById("title")
+    let signForm = document.getElementById("sign")
+    let alias = document.getElementById("alias")
+    let pass = document.getElementById("pass")
+    let login = document.getElementById("in")
+    let signUp = document.getElementById("up")
+    const gun = Gun(["https://eczado.loca.lt"]);
+    const user = gun.user();
+
+    // sign up
+    signUp.addEventListener("click", (e) => {
+      user.auth(alias.value, pass.value);
+    });
+
+    // login
+    login.addEventListener("click", (e) => {
+      e.preventDefault();
+      user.auth(alias.value, pass.value);
+    });
+
+    function UI(say, id) {
+      let ul = document.getElementById("todos");
+      let li = document.createElement("li");
+      li.id = id;
+      li.innerHTML = say;
+      ul.appendChild(li);
+    };
+
+    gun.on('auth', () => {
+      signForm.style.display = "none";
+      user.get('said').map().once(UI);
+    });
+
+    gun.get("test").get("paste").on((data, key) => title.innerHTML = data);
+  </script>
+</body>
+
+</html>
