@@ -16,6 +16,7 @@
     <input id="pass" type="password" placeholder="passphrase">
     <input id="in" type="submit" value="sign in">
     <input id="up" type="button" value="sign up">
+    <input id="del" type="button" value="delete user">
   </form>
 
   <ul></ul>
@@ -55,6 +56,11 @@
     $('#sign').on('submit', function (e) {
       e.preventDefault();
       user.auth($('#alias').val(), $('#pass').val());
+    });
+
+    $('#del').on('submit', function (e) {
+      e.preventDefault();
+      user.delete($('#alias').val(), $('#pass').val());
     });
 
     $('#said').on('submit', function (e) {
