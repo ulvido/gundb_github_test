@@ -45,7 +45,7 @@
     if (user.is) userAutharized();
 
     $('#userlar').on('click', function (e) {
-      users.map(console.log);
+      users.map().once(console.log);
     });
 
     $('#up').on('click', function (e) {
