@@ -25,6 +25,8 @@
     <input id="speak" type="submit" value="speak">
   </form>
 
+  <input type="button" id="userlar" value="Userları Logla">
+
   <script src="jquery.js"></script>
   <script src="gun.js"></script>
   <script src="sea.js"></script>
@@ -32,13 +34,19 @@
   <script>
     var gun = Gun({ peers: ["https://ulvigundb.loca.lt/gun"] });
     var user = gun.user().recall({ sessionStorage: true });
+    const users = gun.get("users")
 
     const userAutharized = () => {
       $('#sign').hide();
       user.get('said').map().once(UI);
+      users.set(user);
     }
 
     if (user.is) userAutharized();
+
+    $('#userlar').on('click', function (e) {
+      users.map(console.log);
+    });
 
     $('#up').on('click', function (e) {
       user.create($('#alias').val(), $('#pass').val());
